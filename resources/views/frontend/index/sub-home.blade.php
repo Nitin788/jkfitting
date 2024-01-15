@@ -29,18 +29,25 @@
                             <div class="row">
                                 @foreach($subcategories as $subcat)
                                 <div class="col-lg-3 col-md-6">
-                                    <div class="product-wrapper mb-25 shop">
-                                        <div class="product-img mb-25">
-                                            <a href="product-details.php?id=aldrops-elite ">
-                                                <img src="assert/products/61.png" oncontextmenu="return false">
-                                            </a>
+                                    <form method="POST" action="{{route('payment.store')}}">
+                                        @csrf
+                                        <div class="product-wrapper mb-25 shop">
+                                            <div class="product-img mb-25">
+                                                <a href="#">
+                                                    <img src="{{asset('image/'.$subcat->photo)}}" oncontextmenu="return false">
+                                                </a>
+                                            </div>
+                                            <div class="product-content">
+                                                <h4>
+                                                    <a href="#">{{$subcat->title}}</a>
+                                                    <div class="by m-2">
+                                                        <button class="btn btn-primary">Buy Now</button>
+                                                        <h3>$200</h3>
+                                                    </div>
+                                                </h4>
+                                            </div>
                                         </div>
-                                        <div class="product-content">
-                                            <h4>
-                                                <a href="{{asset('image/'.$subcat->photo)}}">{{$subcat->title}}</a>
-                                            </h4>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
                                 @endforeach
                             </div>

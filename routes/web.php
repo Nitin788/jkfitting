@@ -5,6 +5,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\HomeController;
+use Srmklive\PayPal\Facades\Paypal;
+use Illuminate\Http\Request;
 
 /*
 
@@ -84,6 +86,32 @@ Route::GET('contact page',[HomeController::class,'create'])->name('contact');
 Route::GET('about page',[HomeController::class,'about'])->name('about');
 
 Route::GET('subcategory',[HomeController::class,'subcat'])->name('subcategory');
+Route::POST('payment',[HomeController::class,'payment'])->name('payment.store');
+
+Route::get('payment',function(){
+    $data = [
+        'items' => [
+            [
+                'name' => 'Product Name',
+                'price' => 10,
+                'qty' => 1,
+            ],
+        ],
+        'invoice_id' => uniqid(),
+        'invoice_description' => 'Description for the invoice',
+        'return_url' => url('/payment/success'),
+        'cancel_url' => url('/payment/cancel'),
+        'total' => 10,
+    ];
+    $response = Paypal::setExpressCheckout($data);
+    
+});
+
+Route::get('/payment/success',function(Request $request){
+
+});
+
+
 
 
 

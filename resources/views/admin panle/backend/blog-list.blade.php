@@ -35,7 +35,7 @@
                         <td>{{$item['photo']}}</td>
                         <td>{{date('d-m-y',strtotime($item['created_at']))}}</td>
                         <td><a href="{{route('blog.edit',encrypt($item['id']))}}" class="btn-primary btn-sm">Edit</a></td>
-                        <td><a href="{{route('delete-blog',encrypt($item['id'])}}" class="btn btn-danger btn-sm">delete</a></td>
+                        <td><a href="{{route('delete-blog',encrypt($item['id']))}}" class="btn btn-danger btn-sm">delete</a></td>
                     </tr>
                     @endforeach
                 </tbody>

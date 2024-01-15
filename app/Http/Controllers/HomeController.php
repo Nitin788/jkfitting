@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Models\blog;
 use App\Models\category;
 use App\Models\subcategory;
+
 
 class HomeController extends Controller
 {
@@ -32,45 +34,54 @@ class HomeController extends Controller
     public function subcat()
     {
         $subcategories = subcategory::all();
-        return view('frontend.index.sub-home',compact('subcategories'));
+        return view('frontend.index.sub-home', compact('subcategories'));
     }
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function showSuccessPage()
     {
-        //
+        return view('payment.success');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function payment(Request $request)
     {
-        //
-    }
+        $data = [
+            'items' => [
+                [
+                    'name' => 'Product 1',
+                    'price' => 10,
+                    'qty' => 1,
+                ],
+            ],
+            'invoice_id' => uniqid(),
+            'invoice_description' => 'Description for the invoice',
+            'return_url' => route('payment.success'),
+            'cancel_url' => route('payment.failure'),
+            'total' => 10,
+        ];
+        // Set your payment details in $data
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        $response = $this->provider->setExpressCheckout($data);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+        return redirect($response['paypal_link']);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+   
+    public function executePayment()
     {
-        //
+        $token = request('token');
+        $payerId = request('PayerID');
+
+        $response = $this->provider->getExpressCheckoutDetails($token);
+
+        $data = [];
+        // Set your payment details in $data
+
+        $response = $this->provider->doExpressCheckoutPayment($data, $token, $payerId);
+
+        if ($response['ACK'] === 'Success') {
+            // Payment successful, perform your actions
+            return view('payment.success');
+        } else {
+            // Payment failed, handle accordingly
+            return view('payment.failure');
+        }
     }
 }

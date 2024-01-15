@@ -13,6 +13,7 @@ class SubcategoryController extends Controller
      */
     public function index()
     {
+        $subcategories = subcategory::all();
         return view('admin panle.backend.sub_category_list', compact('subcategories'));
     }
     public function subcategory()
